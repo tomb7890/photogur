@@ -5,7 +5,10 @@ Rails.application.routes.draw do
   post 'pictures' => 'pictures#create' # this is a new line of code
   get 'pictures/new' => 'pictures#new' # this is also a new line of code
 
-  get 'pictures/:id' => 'pictures#show'
+  get 'pictures/:id' => 'pictures#show', as: 'picture'
+
+  get 'pictures/:id/edit' => "pictures#edit", as: "edit_picture"
+  patch 'pictures/:id' => "pictures#update"
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
