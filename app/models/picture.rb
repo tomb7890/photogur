@@ -1,2 +1,3 @@
-class Picture < ActiveRecord::Base
+class Picture < ApplicationRecord
+
 end
