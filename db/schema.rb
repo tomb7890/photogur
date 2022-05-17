@@ -12,7 +12,10 @@
 
 ActiveRecord::Schema.define(version: 2015_04_15_190649) do
 
-  create_table "pictures", force: :cascade do |t|
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "pictures", id: :serial, force: :cascade do |t|
     t.string "artist"
     t.string "title"
     t.string "url"
