@@ -39,6 +39,8 @@ gem 'sdoc', group: :doc
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+gem 'cloudinary'
+
 gem 'web-console', group: :development
 
 group :development, :test do
