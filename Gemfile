@@ -5,7 +5,7 @@ ruby "2.7.6"
 gem 'puma'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.2.7.1'
+gem 'rails', '~> 5.2.8'
 
 gem 'bootsnap', require: false
 
