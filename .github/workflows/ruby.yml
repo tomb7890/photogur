@@ -6,9 +6,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: ruby/setup-ruby@v1.47.0
-      with:
-        ruby-version: 2.7.2
-
-      
+    - uses: ruby/setup-ruby@v1
     - run: bundle exec rake
