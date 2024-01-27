@@ -1,30 +1,56 @@
-name: Test Rails
+name: Rails Unit Tests
+
 on:
   push:
-    branches: [ "master" ]
+    branches: [ master]
   pull_request:
-    branches: [ "master" ]
+    branches: [ master]
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:12
+        ports: ['5432:5432']
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
 
-    - name: Install PostgreSQL client
-      run: sudo apt-get -yqq install libpq-dev
+      - name: Install PostgreSQL client
+        run: sudo apt-get -yqq install libpq-dev
 
-    - name: Install dependencies
-      run: bundle install
+      - name: Cache Ruby Gems
+        uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: ${{ runner.os }}-gems-
 
+      - name: Bundle Install
+        run: |
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
 
-    - name: Run database migrations
-      run: bundle exec rails db:migrate
+      - name: Run Tests
+        env:
+          RAILS_ENV: test
+          WITH_COVERAGE: true
+          DISABLE_SPRING: 1
+        run: |
+          cp .env.example .env
+          bundle exec rake db:create
+          bundle exec rake db:migrate
+          bundle exec test
 
-    - name: Run tests
-      run: bundle exec test
