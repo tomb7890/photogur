@@ -1,10 +1,29 @@
-# simple workflow to automtate test taken from https://github.com/ruby/setup-ruby
-name: My workflow
-on: [push, pull_request]
+name: Test Rails
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
 jobs:
   test:
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v4
-    - uses: ruby/setup-ruby@v1
-    - run: bundle exec rake
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+
+    - name: Install dependencies
+      run: bundle install
+
+    - name: Configure PostgreSQL service
+      uses: docker/setup-postgres@v1
+
+    - name: Run database migrations
+      run: bundle exec rails db:migrate
+
+    - name: Run tests
+      run: bundle exec test
