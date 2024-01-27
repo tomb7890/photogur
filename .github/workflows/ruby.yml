@@ -16,11 +16,12 @@ jobs:
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
 
+    - name: Install PostgreSQL client
+      run: sudo apt-get -yqq install libpq-dev
+
     - name: Install dependencies
       run: bundle install
 
-    - name: Configure PostgreSQL service
-      uses: docker/setup-postgres@v1
 
     - name: Run database migrations
       run: bundle exec rails db:migrate
